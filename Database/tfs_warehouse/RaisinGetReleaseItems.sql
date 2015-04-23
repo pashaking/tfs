@@ -16,7 +16,8 @@ BEGIN
 	--select @TagId TagId,@PropertyId PropertyId
 
 	select w.ID,w.[Work Item Type],w.Title,w.State,cwi.System_AssignedTo AssignedTo,cwi.IterationPath [Iteration],AreaPath [Area],
-	'http://tfs2013-vm:8080/tfs/AKACollection/Raisin/Team B/_workitems#id=' + CAST(w.ID as varchar(MAX)) + '&_a=edit' URL, CAST('NULL' AS VARCHAR(MAX)) Tags
+	'http://tfs2013-vm:8080/tfs/AKACollection/Raisin/Team B/_workitems#id=' + CAST(w.ID as varchar(MAX)) + '&_a=edit' URL, CAST('NULL' AS VARCHAR(MAX)) Tags,
+	w.Fld10084 [Backlog Priority]
 	INTO #ReleaseItems
 	--,w.fld10101 Branch,w.Fld10084 BacklogPriority, 
 	--w.fld10102 DeploymentDate,w.[Changed Date]--,tmp.*,w.* 
@@ -34,7 +35,6 @@ BEGIN
 	) tmp
 	INNER JOIN TFS_AKACOllection..WorkItemsLatest w ON w.ID = ItemID
 	LEFT OUTER JOIN tfs_warehouse..CurrentWorkItemView cwi ON cwi.system_id = w.ID 
-	order by w.Fld10084 /*BacklogPriority*/
 
 	WHILE EXISTS(SELECT * FROM #ReleaseItems WHERE Tags = 'NULL')
 	BEGIN
@@ -60,7 +60,7 @@ BEGIN
 		WHERE ID = @ItemId
 	END	
 			
-	SELECT * FROM #ReleaseItems	
+	SELECT * FROM #ReleaseItems	ORDER BY [Backlog Priority]
 
 	DROP TABLE #ReleaseItems
 
