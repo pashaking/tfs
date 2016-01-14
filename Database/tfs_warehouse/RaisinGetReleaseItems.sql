@@ -17,7 +17,7 @@ BEGIN
 
 	select w.ID,w.[Work Item Type],w.Title,w.State,cwi.System_AssignedTo AssignedTo,cwi.IterationPath [Iteration],AreaPath [Area],
 	'http://tfs2013-vm:8080/tfs/AKACollection/Raisin/Team B/_workitems#id=' + CAST(w.ID as varchar(MAX)) + '&_a=edit' URL, CAST('NULL' AS VARCHAR(MAX)) Tags,
-	w.Fld10084 [Backlog Priority]
+	w.Fld10084 [Backlog Priority], w.fld10102 DeploymentDate
 	INTO #ReleaseItems
 	--,w.fld10101 Branch,w.Fld10084 BacklogPriority, 
 	--w.fld10102 DeploymentDate,w.[Changed Date]--,tmp.*,w.* 
